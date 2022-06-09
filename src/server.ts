@@ -23,7 +23,7 @@ export const server = (port: number) => new Promise((resolve, reject) => {
       // should not be compressed if context takeover is disabled.
     }
   }, () => {
-    console.log(`WSS started on port: ${port}`)
+    console.log(`Peer started on port: ${port}`)
     resolve(true)
   })
 
@@ -31,12 +31,11 @@ export const server = (port: number) => new Promise((resolve, reject) => {
 
   wss.on('connection', (ws, req) => {
     ws.on('message', (data) => {
-      console.log('received: %s', data);
-      console.log(req.socket.remoteAddress)
+      console.log(`Message received from="${req.socket.remoteAddress}" content="${data}"`);
     });
 
     ws.on('close', (reasonCode, description) => {
-      console.log('::ON CLOSE', reasonCode, description.toString())
+      console.log('Client disconnected', reasonCode, description.toString())
       resolve(true);
     })
 
