@@ -1,18 +1,18 @@
 import WebSocket, { RawData } from 'ws';
 
 export const client = (port: number) => {
-  const ws = new WebSocket(`ws://localhost:${port}`);
+  const server = new WebSocket(`ws://localhost:${port}`);
 
-  ws.on('open', () => {
+  server.on('open', () => {
     console.log(`Connected to peer ws://localhost:${port}`)
-    ws.send('Hello from client');
+    server.send('Hello from client');
   });
 
-  ws.on('message', (data: RawData) => {
+  server.on('message', (data: RawData) => {
     console.log(`New message from ws://localhost:${port} data=${data.toString()}`);
   });
 
-  ws.on('close', () => {
+  server.on('close', () => {
     console.log(`Disconnected from peer ws://localhost:${port}`)
   })
 }

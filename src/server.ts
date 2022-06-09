@@ -1,7 +1,8 @@
 import WebSocket, {WebSocketServer} from 'ws'
+import {v4} from "uuid";
 
 export const server = (port: number) => new Promise((resolve, reject) => {
-  const wss = new WebSocketServer({
+  const server = new WebSocketServer({
     port,
     perMessageDeflate: {
       zlibDeflateOptions: {
@@ -23,25 +24,32 @@ export const server = (port: number) => new Promise((resolve, reject) => {
       // should not be compressed if context takeover is disabled.
     }
   }, () => {
-    console.log(`Peer started on port: ${port}`)
+    console.log('Peer started on port:', port)
     resolve(true)
   })
 
-  wss.on('error', (error) => reject(error))
+  server.on('error', (error) => reject(error))
 
-  wss.on('connection', (ws, req) => {
-    ws.on('message', (data) => {
-      console.log(`Message received from="${req.socket.remoteAddress}" content="${data}"`);
+  server.on('connection', (client, req) => {
+    client["id"] = v4();
+    client.on('message', (data) => {
+      console.log('Message received from="${req.socket.remoteAddress}" content="${data}"`);
     });
 
-    ws.on('close', (reasonCode, description) => {
+    client.on('close', (reasonCode, description) => {
       console.log('Client disconnected', reasonCode, description.toString())
       resolve(true);
     })
 
-    ws.send(`Init message from server: ws://localhost:${port}`);
+    const clientIds: string[] = [];
+    server.clients.forEach((client) => {
+      // @ts-ignore
+      clientIds.push(client.id)
+    });
 
-    wss.clients.forEach((client) => {
+    client.send(`Init message from server: ws://localhost:${port}, ${JSON.stringify({clientIds})}`);
+
+    server.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         client.send('New client connected');
       }
