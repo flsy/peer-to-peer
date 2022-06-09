@@ -2,9 +2,9 @@ const WebSocket = require('ws')
 
 const client = (port) => {
   const ws = new WebSocket(`ws://localhost:${port}`);
-  console.log('Client start')
 
   ws.on('open', function open() {
+    console.log(`Connected to peer on port: ${port}`)
     ws.send('Hello from client');
   });
 
@@ -13,7 +13,7 @@ const client = (port) => {
   });
 
   ws.on('close', () => {
-    console.log('Server disconnected')
+    console.log(`Server disconnected on port: ${port}`)
   })
 }
 

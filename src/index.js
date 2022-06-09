@@ -1,17 +1,19 @@
 const { server } = require('./server')
 const { client } = require('./client')
 
-const existingPeerPort = process.env['EXISTING_PEER_PORT']
-const newPeerPort = process.env['NEW_PEER_PORT']
+const port = process.env['PORT']
+const peers = process.env['PEERS']
 
-if (!newPeerPort) {
+if (!port) {
   throw new Error('No port defined!')
 }
+const trim = (value) => value.trim()
+const getPeers = (peers) => peers.split(',').map(trim)
 
 const start = async () => {
-  await server(newPeerPort)
-  if (existingPeerPort) {
-    await client(existingPeerPort)
+  await server(port)
+  if (peers) {
+    await Promise.all(getPeers(peers).map(async (peerPort) => await client(peerPort)))
   }
 }
 

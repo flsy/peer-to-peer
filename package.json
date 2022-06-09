@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node "
+    "alone": "PORT=8080 node src/index.js",
+    "second": "PEERS=8080 PORT=8081 node src/index.js",
+    "third": "PEERS=8080,8081 PORT=8082 node src/index.js"
   },
   "keywords": [],
   "author": "",
