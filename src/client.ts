@@ -1,6 +1,7 @@
-const WebSocket = require('ws')
+import {RawData} from "ws";
+import WebSocket from 'ws';
 
-const client = (port) => {
+export const client = (port: number) => {
   const ws = new WebSocket(`ws://localhost:${port}`);
 
   ws.on('open', function open() {
@@ -8,7 +9,7 @@ const client = (port) => {
     ws.send('Hello from client');
   });
 
-  ws.on('message', function message(data) {
+  ws.on('message', function message(data: RawData) {
     console.log('received: %s', data);
   });
 
@@ -16,5 +17,3 @@ const client = (port) => {
     console.log(`Server disconnected on port: ${port}`)
   })
 }
-
- module.exports = { client }

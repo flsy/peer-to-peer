@@ -1,7 +1,7 @@
-const WebSocket = require('ws')
+import WebSocket, {WebSocketServer} from 'ws'
 
-const server = (port) => new Promise((resolve, reject) => {
-  const wss = new WebSocket.WebSocketServer({
+export const server = (port: number) => new Promise((resolve, reject) => {
+  const wss = new WebSocketServer({
     port,
     perMessageDeflate: {
       zlibDeflateOptions: {
@@ -37,7 +37,7 @@ const server = (port) => new Promise((resolve, reject) => {
 
     ws.on('close', (reasonCode, description) => {
       console.log('::ON CLOSE', reasonCode, description.toString())
-      resolve();
+      resolve(true);
     })
 
     ws.send(`Init message from server: ws://localhost:${port}`);
@@ -49,5 +49,3 @@ const server = (port) => new Promise((resolve, reject) => {
     });
   });
 })
-
-module.exports = { server }
