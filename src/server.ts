@@ -29,8 +29,8 @@ export const server = (port: number) => new Promise((resolve, reject) => {
 
   wss.on('error', (error) => reject(error))
 
-  wss.on('connection', function connection(ws, req) {
-    ws.on('message', function message(data) {
+  wss.on('connection', (ws, req) => {
+    ws.on('message', (data) => {
       console.log('received: %s', data);
       console.log(req.socket.remoteAddress)
     });
@@ -42,7 +42,7 @@ export const server = (port: number) => new Promise((resolve, reject) => {
 
     ws.send(`Init message from server: ws://localhost:${port}`);
 
-    wss.clients.forEach(function each(client) {
+    wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         client.send('New client connected');
       }
