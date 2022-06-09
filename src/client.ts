@@ -1,5 +1,4 @@
-import {RawData} from "ws";
-import WebSocket from 'ws';
+import WebSocket, { RawData } from 'ws';
 
 export const client = (port: number) => {
   const ws = new WebSocket(`ws://localhost:${port}`);
