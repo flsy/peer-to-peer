@@ -9,8 +9,7 @@ export const client = (port: number) => {
   });
 
   ws.on('message', (data: RawData) => {
-    console.log(`New message from ws://localhost:${port} data=${data}`);
-    console.log('Received: ', data);
+    console.log(`New message from ws://localhost:${port} data=${data.toString()}`);
   });
 
   ws.on('close', () => {
