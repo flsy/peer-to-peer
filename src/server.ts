@@ -31,9 +31,10 @@ export const server = (port: number) => new Promise((resolve, reject) => {
   server.on('error', (error) => reject(error))
 
   server.on('connection', (client, req) => {
+    // @ts-ignore
     client["id"] = v4();
     client.on('message', (data) => {
-      console.log('Message received from="${req.socket.remoteAddress}" content="${data}"`);
+      console.log(`Message received from="${req.socket.remoteAddress}" content="${data}"`);
     });
 
     client.on('close', (reasonCode, description) => {
@@ -46,6 +47,8 @@ export const server = (port: number) => new Promise((resolve, reject) => {
       // @ts-ignore
       clientIds.push(client.id)
     });
+
+    console.log('Client connected')
 
     client.send(`Init message from server: ws://localhost:${port}, ${JSON.stringify({clientIds})}`);
 
