@@ -5,7 +5,7 @@ import {getPeerPorts} from "./utils";
 
 const peer = async (config: IConfig) => {
   await server(config.port);
-  await Promise.all(config.peers.map(async (peerPort) => await client(peerPort)))
+  await client( `ws://localhost:${config.port}`, config.peers.map(port => `ws://localhost:${port}`))
 }
 
 const main = () => {
